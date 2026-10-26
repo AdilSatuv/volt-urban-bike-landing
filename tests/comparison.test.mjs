@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {compareConfigurations,configurationSummary} from '../lib/compare-configurations.js';
+const base={finish:'mist',battery:'city',assist:2,terrain:'mixed'};
+test('snapshots compare validated price and range without sharing state',()=>{const second={...base,battery:'long',finish:'ember'},c=compareConfigurations(base,second);assert.equal(c.priceDelta,22000);assert.ok(c.rangeDelta>0);assert.equal(c.sameConditions,true);assert.equal(base.finish,'mist');assert.equal(c.first.capacity,360);assert.equal(c.second.capacity,540)});
+test('different route assumptions are explicit and invalid values fail',()=>{assert.equal(compareConfigurations(base,{...base,terrain:'hills'}).sameConditions,false);assert.throws(()=>configurationSummary({...base,battery:'unknown'}),RangeError);assert.throws(()=>configurationSummary({...base,assist:0}),RangeError)});
