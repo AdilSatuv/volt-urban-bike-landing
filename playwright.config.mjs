@@ -6,6 +6,8 @@ export default defineConfig({
   reporter: "list",
   use: { baseURL: "http://127.0.0.1:4173", trace: "retain-on-failure" },
   projects: [
+    { name: "firefox", use: { ...devices["Desktop Firefox"] } },
+    { name: "webkit", use: { ...devices["Desktop Safari"] } },
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },
     {
       name: "mobile",
