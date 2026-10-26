@@ -14,8 +14,21 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+      - run: node scripts/check-budgets.mjs
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run test:e2e
+      - name: Record interaction demo
+        run: node scripts/record-demo.mjs
+        env:
+          DEMO_SLUG: volt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: interaction-demo
+          path: |
+            recordings/*.webm
+            recordings/*-poster.png
+          retention-days: 14
       - uses: actions/upload-artifact@v4
         if: always()
         with:
