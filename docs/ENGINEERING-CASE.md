@@ -26,3 +26,7 @@ URL принимает только известные значения отде
 VOLT One — вымышленная модель. Нет физических испытаний, реальных спецификаций, покупки или бронирования. Демо-форма проверяет ввод, но ничего не отправляет.
 
 Публичная страница: /case-study/
+
+
+## Interaction pass
+A new contextual interaction is covered by pure-function tests and browser scenarios. The CI resource-budget check constrains compressed home JS/HTML and raster sizes; it does not silently raise limits. Videos are recorded from the real static builds in CI, without audio or personal data. Physical phones remain untested.
