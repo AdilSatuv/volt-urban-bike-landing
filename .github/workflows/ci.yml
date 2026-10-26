@@ -1,0 +1,38 @@
+name: Validate site
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-test-results
+          path: test-results/
+          retention-days: 7
+
+      - name: Measure mobile performance
+        run: |
+          node scripts/serve-performance.mjs > /tmp/site-performance.log 2>&1 &
+          for attempt in {1..20}; do curl -sf http://127.0.0.1:4175/ > /dev/null && break; sleep 1; done
+          mkdir -p performance
+          npx --yes lighthouse@13.5.0 http://127.0.0.1:4175/ --chrome-flags="--headless --no-sandbox" --only-categories=performance --output=json --output=html --output-path=performance/home --quiet
+          node scripts/performance-summary.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-reports
+          path: performance/
+          retention-days: 14
